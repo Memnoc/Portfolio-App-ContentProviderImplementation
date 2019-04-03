@@ -1,10 +1,13 @@
 package com.smartdroidesign.contentproviderimplementation;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDiskIOException;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -12,6 +15,13 @@ import android.support.annotation.Nullable;
 
 public class MyContentProvider extends ContentProvider {
 
+    /** Uri.parse() implementation (used in insert())
+     * a - schema > content://
+     * b - package name + "provider"
+     * c - path > the db table wqe are using, obtained via DatabaseHelper.TABLE_VICS
+     * (can also be used to specify a single row)
+     */
+    static final Uri CONTENT_URI = Uri.parse("content://com.smartdroidesign.contentproviderimplementation.provider/" + DatabaseHelper.TABLE_VICS );
     // Declaring a field to store the context
     private Context context;
     // Declaring a field to store the database
@@ -66,10 +76,35 @@ public class MyContentProvider extends ContentProvider {
         return null;
     }
 
+    /** insert() implementation
+     * a - call the insert() on database, pass in the table and values.
+     * b - store the insert statement in a variable (long)
+     * c - check if the insert is null (-1) or not (row id)
+     * d - inside the if() create a new URI for the inserted row
+     * e - set it equal to a constant containing the content uri (see implementation)
+     * f - pass in a row_id as well
+     * g - we still need to call notifyChanged() and return the new URI -
+     * - to do that, we need a new object for the ContentResolver -
+     * - content resolver is the way you communicate to the ContentProvider
+     * (you cannot have access to the ContentProvider directly, you need to pass through a ContentResolver)
+     * h - use context to getContentResolver, and chain notifyChange() passing the newUri and an observer (not needed)
+     * i - return the new uri
+     * l - throw an exception, in case of failure
+     * @param uri
+     * @param values > the data we want to insert
+     * @return URI for the newly inserted item
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        long rowID  = database.insert(DatabaseHelper.TABLE_VICS, null, values);
+        if (rowID > -1) {
+            Uri newUri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+            context.getContentResolver().notifyChange(newUri, null);
+            return newUri;
+
+        }
+        throw new SQLiteException("Insert failed for Uri: " + uri);
     }
 
     @Override
