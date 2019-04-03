@@ -11,7 +11,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     // Declared a field for the linear layout and the DB helper
     LinearLayout linearLayout;
-    DatabaseHelper dbHelper;
+//    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Populate DB helper
-        dbHelper = new DatabaseHelper(this);
+        // OLD CODE PREVIOUS CUSTOM CONTENT PROVIDER
+//        dbHelper = new DatabaseHelper(this);
 
         // set view variables
         Button addButton = findViewById(R.id.addButton);
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editText.getText().toString();
                 if (name.length() > 0) {
-                    dbHelper.addContact(name);
+                    addContact(name);
                     updateList();
                     editText.setText("");
                 }
@@ -49,17 +50,26 @@ public class MainActivity extends AppCompatActivity {
         updateList();
     }
 
+    /** NEW addContact()
+     *
+     * @param name
+     */
+    private void addContact(String name) {
+    }
+
     public void updateList() {
         // Removing all the views attached to our list
         linearLayout.removeAllViews();
-        // Get a list array of all the rows we need to show
-        Row[] rows = dbHelper.getContacts();
-        // for each row, get a new TextView, add that TextView to the LinearLayout
-        for (Row row : rows) {
-            TextView newEntry = getNewTextView(row.id, row.name);
-            linearLayout.addView(newEntry);
-        }
+        // OLD CODE PREVIOUS CUSTOM CONTENT PROVIDER
+//        // Get a list array of all the rows we need to show
+//        Row[] rows = dbHelper.getContacts();
+//        // for each row, get a new TextView, add that TextView to the LinearLayout
+//        for (Row row : rows) {
+//            TextView newEntry = getNewTextView(row.id, row.name);
+//            linearLayout.addView(newEntry);
+//        }
     }
+
 
     private TextView getNewTextView(String id, String name) {
         TextView textView = new TextView(this);
