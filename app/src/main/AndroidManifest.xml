@@ -18,8 +18,9 @@
         </activity>
 
         <provider
+            android:name=".MyContentProvider"
             android:authorities="com.smartdroidesign.contentproviderimplementation.provider"
-            android:name=".MyContentProvider"/>
+            android:exported="true" />
     </application>
 
 </manifest>

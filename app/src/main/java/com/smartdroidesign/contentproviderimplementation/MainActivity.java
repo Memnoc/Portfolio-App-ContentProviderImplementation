@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 String id = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
                 TextView textView = getNewTextView(id, name);
-                LinearLayout linearLayout = findViewById(R.id.linearLayout);
                 linearLayout.addView(textView);
             } while (cursor.moveToNext());
             cursor.close();

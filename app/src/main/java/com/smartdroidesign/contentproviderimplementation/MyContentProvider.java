@@ -20,7 +20,7 @@ public class MyContentProvider extends ContentProvider {
      * c - path > the db table wqe are using, obtained via DatabaseHelper.TABLE_VICS
      * (can also be used to specify a single row)
      */
-    static final Uri CONTENT_URI = Uri.parse("content://com.smartdroidesign.contentproviderimplementation.provider/" + DatabaseHelper.TABLE_VICS );
+    static final Uri CONTENT_URI = Uri.parse("content://com.smartdroidesign.contentproviderimplementation.provider/" + DatabaseHelper.TABLE_VICS);
     // Declaring a field to store the context
     private Context context;
     // Declaring a field to store the database
